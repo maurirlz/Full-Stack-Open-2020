@@ -2,19 +2,28 @@ import ReactDOM from 'react-dom'
 import React from 'react'
 
 const App = () => {
+
   const course = 'Half Stack application development'
-  const part1 = 'Fundamentals of React'
-  const exercises1 = 10
-  const part2 = 'Using props to pass data'
-  const exercises2 = 7
-  const part3 = 'State of a component'
-  const exercises3 = 14
+  const parts = [
+    {
+      name: 'Fundamentals of React',
+      exercises: 10
+    },
+    {
+      name: 'Using props to pass data',
+      exercises: 7
+    },
+    {
+      name: 'State of a component',
+      exercises: 14
+    }
+  ]
 
   return (
     <div>
       <Header name= {course}/>
-      <Content firstName= {part1} firstPartExercises= {exercises1} secondName= {part2} secondPartExercises= {exercises2} thirdName= {part3} thirdPartExercises= {exercises3}/>
-      <Total exercises1= {exercises1} exercises2={exercises2} exercises3={exercises3}/>
+      <Content informationOfParts = {parts}/>
+      <Total arrayOfExercises={parts}/>
     </div>
   )
 }
@@ -30,11 +39,26 @@ const Header = (props) => {
 
 const Content = (props) => {
 
+  let part1Info = {
+    title: props.informationOfParts[0].name ,
+    exercises: props.informationOfParts[0].exercises
+  }
+
+  let part2Info = {
+    title: props.informationOfParts[1].name ,
+    exercises: props.informationOfParts[2].exercises
+  }
+
+  let part3Info = {
+    title: props.informationOfParts[2].name ,
+    exercises: props.informationOfParts[2].exercises
+  }
+
   return (
     <>
-      <Part name= {props.firstName} numberExercises= {props.firstPartExercises}/>
-      <Part name= {props.secondName} numberExercises= {props.secondPartExercises}/>
-      <Part name= {props.thirdName} numberExercises= {props.thirdPartExercises}/>
+      <Part partInfo = {part1Info}/>
+      <Part partInfo = {part2Info}/>
+      <Part partInfo = {part3Info}/>
     </>
   )
 }
@@ -44,15 +68,19 @@ const Part = (props) => {
   return (
 
     <p>
-      {props.name} {props.numberExercises}
+      {props.partInfo.title} {props.partInfo.exercises}
     </p>
   )
 }
 
 const Total = (props) => {
 
+  let part1Exercises = (props.arrayOfExercises[0].exercises);
+  let part2Exercises = (props.arrayOfExercises[1].exercises);
+  let part3Exercises = (props.arrayOfExercises[2].exercises);
+
   return (
-    <p>Number of exercises {props.exercises1 + props.exercises2 + props.exercises3}</p>
+    <p>Number of exercises {part1Exercises + part2Exercises + part3Exercises}</p>
   )
 }
 
