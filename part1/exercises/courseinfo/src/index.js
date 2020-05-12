@@ -48,7 +48,7 @@ const Content = (props) => {
 
   let part2Info = {
     title: props.informationOfParts[1].name ,
-    exercises: props.informationOfParts[2].exercises
+    exercises: props.informationOfParts[1].exercises
   }
 
   let part3Info = {
