@@ -50,7 +50,7 @@ const MostVoted = ({anecdotes, totalVotes}) => {
       <div>
         <h1>Most voted quote: </h1>
         <div>
-          <p>All quotes are unvoted, not enough feedback.</p>
+          <p>All quotes are unvoted, not enough feedback to show</p>
         </div>
       </div>
     )
