@@ -7,6 +7,8 @@ const App = ({anecdotes}) => {
 
   const [voteStatus, setVotesStatus] = useState(Array.apply(null, new Array(6)).map(Number.prototype.valueOf,0));
 
+  const mostVoted = voteStatus.indexOf(Math.max(...voteStatus));
+
   let vote = selected;
   
   const handleClick = () => {
@@ -33,24 +35,23 @@ const App = ({anecdotes}) => {
       <p>has {voteStatus[selected]} votes</p>
       <Button handleClick={handleVoteClick} text='vote'/>
       <Button handleClick={handleClick} text='generate a random quote'/>
-      <MostVoted anecdotes={anecdotes} totalVotes= {voteStatus}/>
+      <MostVoted anecdote={anecdotes[mostVoted]} mostVoted= {voteStatus[mostVoted]}/>
     </div>
   )
 }
 
 const Button = ({handleClick, text}) => <button onClick={handleClick}>{text}</button>
 
-const MostVoted = ({anecdotes, totalVotes}) => {
+const MostVoted = ({anecdote, mostVoted}) => {
 
-  const mostVotedQty = totalVotes.indexOf(Math.max(...totalVotes))
 
-  if (mostVotedQty === 0) {
+  if (mostVoted === 0) {
 
     return (
       <div>
         <h1>Most voted quote: </h1>
         <div>
-          <p>All quotes are unvoted, not enough feedback to show</p>
+          <p>All quotes are unvoted, not enough feedback to show.</p>
         </div>
       </div>
     )
@@ -59,9 +60,9 @@ const MostVoted = ({anecdotes, totalVotes}) => {
   return (
     <div>
       <h2>Most voted quote: </h2>
-      <h5>Total votes: {totalVotes[mostVotedQty]}</h5>
+      <h5>Total votes: {mostVoted}</h5>
       <div>
-        <p>{anecdotes[mostVotedQty]}</p>
+        <p>{anecdote}</p>
       </div>
     </div>
   )
