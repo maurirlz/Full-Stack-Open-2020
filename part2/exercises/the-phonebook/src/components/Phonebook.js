@@ -2,11 +2,38 @@ import React, { useState } from "react";
 import Header from "./Header";
 import Form from "./Form";
 import Phones from "./Phones";
+import Filter from "./Filter";
 
 const Phonebook = () => {
+
   const [persons, setPersons] = useState([
-    { name: "Arto Hellas", phone: "3624662233" },
+    { name: 'Arto Hellas', phone: '040-123456' },
+    { name: 'Ada Lovelace', phone: '39-44-5323523' },
+    { name: 'Dan Abramov', phone: '12-43-234345' },
+    { name: 'Mary Poppendieck', phone: '39-23-6423122' }
   ]);
+
+  const [newName, setNewName] = useState("");
+  const [newPhone, setNewPhone] = useState("");
+  const [personFilter, setPersonFilter] = useState('');
+
+  const handleNameChange = (event) => setNewName(event.target.value);
+  const handlePhoneChange = (event) => setNewPhone(event.target.value);
+  const handlePersonFilter = (event) => setPersonFilter(event.target.value);
+
+  const checkIfNameIsNotPresent = (newPerson) => {
+
+    return (persons.find((person) => person.name.toUpperCase === newPerson.name.toUpperCase) === undefined)
+  }
+
+  const checkIfPhoneIsNotPresent = (newPerson) => {
+
+    return (persons.find((person) => newPerson.phone === person.phone) === undefined)
+  }
+
+  const showPersons = personFilter ?
+                      persons.filter(person => person.name.toUpperCase().search(personFilter.toUpperCase()) !== -1)
+                      : persons;
 
   const addPerson = (event) => {
     event.preventDefault();
@@ -16,37 +43,23 @@ const Phonebook = () => {
       phone: newPhone,
     };
 
-    if (persons.find((person) => person.name === newPerson.name) === undefined) {
-
-      if (persons.find((person) => newPerson.phone === person.phone) === undefined) {
+    if (checkIfNameIsNotPresent(newPerson) && checkIfPhoneIsNotPresent(newPerson)) {
 
         setPersons(persons.concat(newPerson));
         setNewName("");
         setNewPhone("");
       } else {
           
-        alert(`number: ${newPerson.phone} is already on the phonebook.`);
+        alert(`${newPerson.name} is already on the phonebook.`);
         setNewName("");
         setNewPhone("");
       }
-    } else {
-        
-      alert(`${newPerson.name} is already added to the phonebook.`);
-      setNewName("");
-      setNewPhone("");
-    }
-  };
-
-  const [newName, setNewName] = useState("");
-  const [newPhone, setNewPhone] = useState("");
-
-  const handleNameChange = (event) => setNewName(event.target.value);
-
-  const handlePhoneChange = (event) => setNewPhone(event.target.value);
+    };
 
   return (
     <div>
-      <Header title="The Phonebook" />
+      <Filter filterChange={handlePersonFilter} value={personFilter} />
+      <Header title="Add a new: " />
       <Form
         addPerson={addPerson}
         newName={newName}
@@ -55,7 +68,7 @@ const Phonebook = () => {
         handlePhoneChange={handlePhoneChange}
       />
       <Header title="Numbers: " />
-      <Phones persons={persons} />
+      <Phones persons={showPersons} />
     </div>
   );
 };
