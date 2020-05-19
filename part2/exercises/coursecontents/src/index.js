@@ -1,8 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Course from './components/Course';
+import axios from 'axios';
 
-/* Define a component responsible for formatting a single course called Course.  */
+const promise = axios.get('http://localhost:3001/notes');
+
+promise.then(response => {
+  console.log(response);
+})
 
 const App = ({ courses }) => {
   
