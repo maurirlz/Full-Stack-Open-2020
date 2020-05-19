@@ -22,7 +22,7 @@ const Phonebook = () => {
     .then(response => {
       setPersons(response.data);
     })
-  })
+  }, []);
 
   const checkIfNameIsNotPresent = (checkingPerson) => {
 
