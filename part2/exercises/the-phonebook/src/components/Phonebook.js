@@ -1,18 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import Form from "./Form";
 import Phones from "./Phones";
 import Filter from "./Filter";
+import axios from 'axios';
 
 const Phonebook = () => {
 
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', phone: '040-123456' },
-    { name: 'Ada Lovelace', phone: '39-44-5323523' },
-    { name: 'Dan Abramov', phone: '12-43-234345' },
-    { name: 'Mary Poppendieck', phone: '39-23-6423122' }
-  ]);
-
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newPhone, setNewPhone] = useState("");
   const [personFilter, setPersonFilter] = useState('');
@@ -20,6 +15,14 @@ const Phonebook = () => {
   const handleNameChange = (event) => setNewName(event.target.value);
   const handlePhoneChange = (event) => setNewPhone(event.target.value);
   const handlePersonFilter = (event) => setPersonFilter(event.target.value);
+
+  useEffect(() => {
+    axios
+    .get("http://localhost:3001/persons")
+    .then(response => {
+      setPersons(response.data);
+    })
+  })
 
   const checkIfNameIsNotPresent = (checkingPerson) => {
 
@@ -66,7 +69,7 @@ const Phonebook = () => {
         newName={newName}
         handleNameChange={handleNameChange}
         newPhone={newPhone}
-        handlePhoneChange={handlePhoneChange}﻿
+        handlePhoneChange={handlePhoneChange}
       />
       <Header title="Numbers: " />
       <Phones persons={showPersons} />
