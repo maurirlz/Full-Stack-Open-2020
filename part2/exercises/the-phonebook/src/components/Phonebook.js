@@ -21,14 +21,14 @@ const Phonebook = () => {
   const handlePhoneChange = (event) => setNewPhone(event.target.value);
   const handlePersonFilter = (event) => setPersonFilter(event.target.value);
 
-  const checkIfNameIsNotPresent = (newPerson) => {
+  const checkIfNameIsNotPresent = (checkingPerson) => {
 
-    return (persons.find((person) => person.name.toUpperCase === newPerson.name.toUpperCase) === undefined)
+    return (persons.find((person) => person.name.toUpperCase() === checkingPerson.name.toUpperCase()) === undefined)
   }
 
-  const checkIfPhoneIsNotPresent = (newPerson) => {
+  const checkIfPhoneIsNotPresent = (checkingPerson) => {
 
-    return (persons.find((person) => newPerson.phone === person.phone) === undefined)
+    return (persons.find((person) => checkingPerson.phone === person.phone) === undefined)
   }
 
   const showPersons = personFilter ?
@@ -45,11 +45,12 @@ const Phonebook = () => {
 
     if (checkIfNameIsNotPresent(newPerson) && checkIfPhoneIsNotPresent(newPerson)) {
 
+        
         setPersons(persons.concat(newPerson));
         setNewName("");
         setNewPhone("");
       } else {
-          
+    
         alert(`${newPerson.name} is already on the phonebook.`);
         setNewName("");
         setNewPhone("");
@@ -65,12 +66,13 @@ const Phonebook = () => {
         newName={newName}
         handleNameChange={handleNameChange}
         newPhone={newPhone}
-        handlePhoneChange={handlePhoneChange}
+        handlePhoneChange={handlePhoneChange}﻿
       />
       <Header title="Numbers: " />
       <Phones persons={showPersons} />
     </div>
   );
 };
+
 
 export default Phonebook;
