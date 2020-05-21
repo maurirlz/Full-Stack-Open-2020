@@ -4,7 +4,6 @@ import Form from "./Form";
 import Phones from "./Phones";
 import Filter from "./Filter";
 import numberService from '../services/numbers';
-import {render} from 'react-dom';
 
 const Phonebook = () => {
 
