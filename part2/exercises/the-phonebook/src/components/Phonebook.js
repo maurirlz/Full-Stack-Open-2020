@@ -3,7 +3,8 @@ import Header from "./Header";
 import Form from "./Form";
 import Phones from "./Phones";
 import Filter from "./Filter";
-import axios from 'axios';
+import numberService from '../services/numbers';
+import {render} from 'react-dom';
 
 const Phonebook = () => {
 
@@ -17,16 +18,16 @@ const Phonebook = () => {
     const handlePersonFilter = (event) => setPersonFilter(event.target.value);
 
     useEffect(() => {
-        axios
-            .get("http://localhost:3001/persons")
-            .then(response => {
-                setPersons(response.data);
+            numberService
+            .getAll()
+            .then(personsData => {
+                setPersons(personsData);
             })
     }, []);
 
     const checkIfNameIsNotPresent = (checkingPerson) => {
 
-        return (persons.find((person) => person.name.toUpperCase() === checkingPerson.name.toUpperCase()) === undefined)
+        return (persons.find((person) => person.name.toUpperCase() === checkingPerson.name.toUpperCase()) ===  undefined)
     }
 
     const checkIfPhoneIsNotPresent = (checkingPerson) => {
@@ -48,22 +49,30 @@ const Phonebook = () => {
 
         if (checkIfNameIsNotPresent(newPerson) && checkIfPhoneIsNotPresent(newPerson)) {
 
-
-            setPersons(persons.concat(newPerson));
-            setNewName("");
-            setNewPhone("");
+            numberService
+                .create(newPerson)
+                .then(returnedPerson => {
+                    setPersons(persons.concat(returnedPerson));
+                });
         } else {
 
-            alert(`${newPerson.name} is already on the phonebook.`);
-            setNewName("");
-            setNewPhone("");
+            alert(`${newPerson.name} is already on the Phonebook.`);
+            setNewName('');
+            setNewPhone('');
         }
+    };
+
+    const deletePerson = (id) => {
+
+        numberService
+            .deletedItem(id)
+            setPersons(persons.filter(person => person.id !== id));
     };
 
     return (
         <div>
             <Filter filterChange={handlePersonFilter} value={personFilter} />
-            <Header title="Add a new: " />
+            <Header title='Add a new: ' />
             <Form
                 addPerson={addPerson}
                 newName={newName}
@@ -71,8 +80,8 @@ const Phonebook = () => {
                 newPhone={newPhone}
                 handlePhoneChange={handlePhoneChange}
             />
-            <Header title="Numbers: " />
-            <Phones persons={showPersons} />
+            <Header title='Numbers: ' />
+            <Phones persons={showPersons} deleteHandler={deletePerson} />
         </div>
     );
 };
