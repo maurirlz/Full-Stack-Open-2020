@@ -9,7 +9,7 @@ const Filter = ({ filterChange, personFilter }) => {
             <Header title="The Phonebook."/>
             <p>Filter shown with: </p>
             <FormInput value={personFilter} type="text" changeHandler={filterChange}/>
-         </div>
+        </div>
     )
 }
 

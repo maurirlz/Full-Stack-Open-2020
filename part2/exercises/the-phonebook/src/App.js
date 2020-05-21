@@ -4,11 +4,11 @@ import Phonebook from './components/Phonebook';
 const App = () => {
 
 
-  return (
-    <>
-      <Phonebook />
-    </>
-  )
+    return (
+        <>
+            <Phonebook />
+        </>
+    )
 }
 
 export default App

@@ -4,9 +4,9 @@ import Number from './Number'
 const Phones = ({ persons }) => {
 
     return (
-        persons.map(person => 
+        persons.map(person =>
             <Number key={person.name} name={person.name} number={person.phone}/>
-          )
+        )
     )
 }
 
