@@ -6,8 +6,8 @@ const Filter = ({ filterChange, personFilter }) => {
 
     return (
         <div>
-            <Header title="The Phonebook."/>
-            <p>Filter shown with: </p>
+            <Header title="Mauri's personal Phone book:"/>
+            <p>Filter names shown with: </p>
             <FormInput value={personFilter} type="text" changeHandler={filterChange}/>
         </div>
     )

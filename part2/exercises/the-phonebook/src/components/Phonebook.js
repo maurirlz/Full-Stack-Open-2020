@@ -4,6 +4,7 @@ import Form from './Form';
 import Phones from './Phones';
 import Filter from './Filter';
 import numberService from '../services/numbers';
+import Notification from './Notification';
 
 const Phonebook = () => {
 
@@ -11,13 +12,16 @@ const Phonebook = () => {
     const [newName, setNewName] = useState('');
     const [newPhone, setNewPhone] = useState('');
     const [personFilter, setPersonFilter] = useState('');
+    const [successfulDeleteMessage, setSuccessfulDeleteMessage] = useState(null);
+    const [successfulAddMessage, setSuccessfulAddMessage] = useState(null);
+    const [successfulEditMessage, setSuccessfulEditMessage] = useState(null);
 
     const handleNameChange = (event) => setNewName(event.target.value);
     const handlePhoneChange = (event) => setNewPhone(event.target.value);
     const handlePersonFilter = (event) => setPersonFilter(event.target.value);
 
     useEffect(() => {
-            numberService
+        numberService
             .getAll()
             .then(personsData => {
                 setPersons(personsData);
@@ -52,6 +56,12 @@ const Phonebook = () => {
                 .create(newPerson)
                 .then(returnedPerson => {
                     setPersons(persons.concat(returnedPerson));
+                    setSuccessfulAddMessage(
+                        'Number successfully added.'
+                    )
+                    setTimeout(() => {
+                        setSuccessfulAddMessage(null);
+                    }, 3000)
                 });
         } else {
 
@@ -59,13 +69,25 @@ const Phonebook = () => {
 
             if (confirm) {
 
-                const existingPerson = persons.find(person => newPerson.name === person.name);
-                const changedPerson = {...existingPerson, phone: newPerson.phone};
+                const existingPerson = persons.find(person => newPerson.name === person.name
+                    || person.phone === newPerson.phone);
+                const changedPerson = {...existingPerson, name: newPerson.name, phone: newPerson.phone};
 
                 numberService
                     .update(changedPerson, existingPerson.id)
                     .then(returnedPerson => {
-                        setPersons(persons.map(person => person.name !== returnedPerson.name ? person : returnedPerson));
+                        setPersons(persons.map(person => person.id !== returnedPerson.id ? person : returnedPerson));
+                        setSuccessfulEditMessage(
+                            `Number of ${returnedPerson.name} successfully updated.`
+                        )
+                        setTimeout(() => {
+                            setSuccessfulEditMessage(null)
+                        }, 3000);
+                    })
+                    .catch(e => {
+
+                        alert(`Error, number was already deleted.`);
+                        setPersons(persons.filter(person => person.id !== changedPerson.id));
                     })
             } else {
 
@@ -78,14 +100,30 @@ const Phonebook = () => {
     const deletePerson = (id) => {
 
         numberService
-            .deletedItem(id)
-            setPersons(persons.filter(person => person.id !== id));
+            .deletedItem(id).then(r => {
+            if (r.status === 200) {
+                setPersons(persons.filter(person => person.id !== id));
+                setSuccessfulDeleteMessage(
+                    `Person successfully deleted.`
+                ).
+                setTimeout(() => {
+                    setSuccessfulDeleteMessage(null);
+                }, 3000);
+            }
+        })
+            .catch(e => {
+
+                alert(`Error, number was already deleted.`);
+                setPersons(persons.filter(person => person.id !== id));
+            });
     };
 
     return (
         <div>
             <Filter filterChange={handlePersonFilter} value={personFilter} />
             <Header title='Add a new: ' />
+            <Notification message={successfulAddMessage} />
+            <Notification message={successfulEditMessage} />
             <Form
                 addPerson={addPerson}
                 newName={newName}
@@ -94,10 +132,10 @@ const Phonebook = () => {
                 handlePhoneChange={handlePhoneChange}
             />
             <Header title='Numbers: ' />
+            <Notification message={successfulDeleteMessage}/>
             <Phones persons={showPersons} deleteHandler={deletePerson} />
         </div>
     );
 };
-
 
 export default Phonebook;
