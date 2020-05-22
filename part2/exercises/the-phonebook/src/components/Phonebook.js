@@ -55,9 +55,23 @@ const Phonebook = () => {
                 });
         } else {
 
-            alert(`${newPerson.name} is already on the Phonebook.`);
-            setNewName('');
-            setNewPhone('');
+            const confirm = window.confirm(`${newPerson.name} is already added on the phone book, replace the old number with the new one?`);
+
+            if (confirm) {
+
+                const existingPerson = persons.find(person => newPerson.name === person.name);
+                const changedPerson = {...existingPerson, phone: newPerson.phone};
+
+                numberService
+                    .update(changedPerson, existingPerson.id)
+                    .then(returnedPerson => {
+                        setPersons(persons.map(person => person.name !== returnedPerson.name ? person : returnedPerson));
+                    })
+            } else {
+
+                setNewName('');
+                setNewPhone('');
+            }
         }
     };
 

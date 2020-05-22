@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 const baseUrl = 'http://localhost:3001/persons';
 
 const getAll = () => {
@@ -11,18 +12,16 @@ const create = (newObject) => {
     return request.then(persons => persons.data);
 }
 
-const update = (newObject) => {
-    const request = axios.post(baseUrl, newObject);
+const update = (newObject, id) => {
+    const request = axios.put(`${baseUrl}/${id}`, newObject);
     return request.then(persons => persons.data);
 }
 
 const deletedItem = (id) => {
 
-    const request = axios
+    return axios
         .delete(`${baseUrl}/${id}`)
         .catch(() => alert("Couldn't delete requested user."));
-
-    return request;
 }
 
 export default { getAll, create, update, deletedItem };
