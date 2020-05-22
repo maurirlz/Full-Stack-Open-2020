@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
-import Header from "./Header";
-import Form from "./Form";
-import Phones from "./Phones";
-import Filter from "./Filter";
+import React, { useState, useEffect } from 'react';
+import Header from './Header';
+import Form from './Form';
+import Phones from './Phones';
+import Filter from './Filter';
 import numberService from '../services/numbers';
 
 const Phonebook = () => {
 
     const [persons, setPersons] = useState([]);
-    const [newName, setNewName] = useState("");
-    const [newPhone, setNewPhone] = useState("");
+    const [newName, setNewName] = useState('');
+    const [newPhone, setNewPhone] = useState('');
     const [personFilter, setPersonFilter] = useState('');
 
     const handleNameChange = (event) => setNewName(event.target.value);
