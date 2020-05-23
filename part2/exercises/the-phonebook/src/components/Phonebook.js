@@ -103,9 +103,8 @@ const Phonebook = () => {
             .deletedItem(id).then(r => {
             if (r.status === 200) {
                 setPersons(persons.filter(person => person.id !== id));
-                setSuccessfulDeleteMessage(
-                    `Person successfully deleted.`
-                ).
+                setSuccessfulDeleteMessage(`Person successfully deleted.`)
+
                 setTimeout(() => {
                     setSuccessfulDeleteMessage(null);
                 }, 3000);
